@@ -1,3 +1,3 @@
-public class Cavalier {
+public class Cavalier extends Pieces {
     
 }

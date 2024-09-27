@@ -1,3 +1,3 @@
-public class Roi {
+public class Roi extends Pieces {
     
 }

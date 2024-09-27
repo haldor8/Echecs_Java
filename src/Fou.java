@@ -1,4 +1,4 @@
 // Décris le fou
-public class Fou {
+public class Fou extends Pieces {
     
 }

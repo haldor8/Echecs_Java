@@ -1,3 +1,3 @@
-public class Reine {
+public class Reine extends Pieces {
     
 }

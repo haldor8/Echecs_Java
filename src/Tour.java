@@ -1,3 +1,3 @@
-public class Tour {
+public class Tour extends Pieces {
     
 }
