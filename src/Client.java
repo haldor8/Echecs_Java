@@ -5,10 +5,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
+import java.awt.*;
 
 // Interface utilisateur
 public class Client extends JFrame {
@@ -35,7 +33,7 @@ public class Client extends JFrame {
 
         } else {
             Couleur.setBackground(Color.WHITE);
-            // le_plateau = new Plateau(Color.yellow);
+            // le_plateau = new Plateau(Color.WHITE);
         }
         this.add(le_plateau, BorderLayout.CENTER);
 
@@ -49,7 +47,7 @@ public class Client extends JFrame {
          */
 
         this.add(Couleur, BorderLayout.SOUTH); // Pour savoir quel joueur on est, on peut rajouter un compteur dedans
-        this.setLocation((num_client - 1) * 400, 400);
+        this.setLocation((num_client - 1) * 400, 400); // A modifié en fonction du nombre de lignes
         this.setSize(400, 400);
         this.setVisible(true);
 
