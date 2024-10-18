@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.util.*;
+
 public class Fou extends Pieces {
 
     public Fou(int num_ligne, int num_colonne, Client proprietaire, boolean a_bouge, List<String> liste_deplacement, Image icon, boolean est_blanc) {

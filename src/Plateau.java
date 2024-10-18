@@ -2,6 +2,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
 // Se situe du côté client et gère l'envoi d'informations au serveur
 public class Plateau extends JPanel {
