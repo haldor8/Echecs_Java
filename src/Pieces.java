@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import javax.swing.*;
+import java.util.*;
 
 // Décris les informations des pièces
 public class Pieces implements Serializable {
@@ -7,7 +9,7 @@ public class Pieces implements Serializable {
     private Client proprietaire;
     private boolean a_bouge;
     private List<String> liste_deplacement;
-    private Image icon;
+    private ImageIcon icon;
     private boolean estBlanc;
 
     public Pieces(int num_ligne, int num_colonne, Client proprietaire, boolean a_bouge, List<String> liste_deplacement, Image icon, boolean estBlanc) {

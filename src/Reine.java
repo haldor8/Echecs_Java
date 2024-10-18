@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.util.*;
+
 public class Reine extends Piece {
 
     public Reine(String couleur) {
