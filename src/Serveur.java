@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 // Gère les connexions des joueurs
 public class Serveur extends Thread {
@@ -15,25 +16,58 @@ public class Serveur extends Thread {
     private JFrame ui_serveur;
     private final ServerSocket id_socket_serveur;
 
+    private JList interface_liste_ip;
+    private DefaultListModel liste_ip;
+
     private LinkedList<Interface_serveur> liste_des_interfaces;
     private List<Client> liste_clients;
 
     public Serveur() throws IOException {
         super();
         ui_serveur = new JFrame();
+        
         ui_serveur.setSize(300, 300);
         ui_serveur.setLocation(0, 0);
         ui_serveur.setLayout(new BorderLayout());
-        listeDesIP = new JList();
-        ui_serveur.add(listeDesIP, BorderLayout.CENTER);
+
+        interface_liste_ip = new JList();
+        ui_serveur.add(interface_liste_ip, BorderLayout.CENTER);
+
         ui_serveur.setVisible(true);
-        dlm = new DefaultListModel();
-        laListeDesConnexions = new LinkedList<>();
 
-        listeDesClients = new ArrayList<>();
+        liste_des_interfaces = new LinkedList<>();
+
+        liste_clients = new ArrayList<>();
 
 
-        this.socketDuServeurQuiEcoute = new ServerSocket(49512); // numero de port un peu au hasard
+        this.id_socket_serveur = new ServerSocket(49512); // numero de port un peu au hasard
+    }
+
+    public void run() {
+        Interface_serveur connex;
+        do {
+
+            try {
+                System.out.println("Serveur en attente");
+                Socket socket_client = id_socket_serveur.accept();
+
+                liste_ip.addElement("-->l'ip " + socket_client.getInetAddress() + " s'est connecte");
+                interface_liste_ip.setModel(liste_ip);
+                
+                connex = new Connexion(socket_client, liste_clients.get(0).get_id_joueur(), this, liste_clients.get(0));
+
+                liste_des_interfaces.add(connex);
+
+                System.out.println("nombre de clients connectés " + liste_clients.size());
+                connex.start();
+            } catch (IOException e) {
+                System.out.println("IOException coté serveur : ");
+                e.printStackTrace();
+            } catch (Exception ex) {
+                System.out.println("Exception inconnue coté serveur : ");
+                ex.printStackTrace();
+            }
+        } while (true);
 
     }
 }
