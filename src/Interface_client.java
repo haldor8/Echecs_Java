@@ -30,6 +30,7 @@ public class Interface_client extends Thread {
     // Code du thread
     public void run(){
         Object obj;
+        Boolean continuer = true;
         do{
             try{
                 entree = new ObjectInputStream(id_socket_client.getInputStream()); // On lit le flux d'entrée pour récupérer les objets envoyés
@@ -43,12 +44,13 @@ public class Interface_client extends Thread {
                 // Ajouter quelque-chose pour recevoir une notif sur l'état de la partie (gagnée, égalitée etc)
                 
                 // Mettre à jour le plateau ici
-            }catch(IOException exep){
+            }catch(IOException exec){
                 System.out.println("Soucis dans le thread de l'interface client numero : " + id_joueur);
-                exep.printStackTrace();
-            }catch(ClassNotFoundException exep){
+                exec.printStackTrace();
+            }catch(ClassNotFoundException exec){
                 System.out.println("Objet de type inconnu recu");
+                exec.printStackTrace();
             }
-        }
+        }while (continuer);
     }
 }
