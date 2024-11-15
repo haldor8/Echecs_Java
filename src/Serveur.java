@@ -54,7 +54,7 @@ public class Serveur extends Thread {
                 liste_ip.addElement("-->l'ip " + socket_client.getInetAddress() + " s'est connecte");
                 interface_liste_ip.setModel(liste_ip);
                 
-                connex = new Connexion(socket_client, liste_clients.get(0).get_id_joueur(), this, liste_clients.get(0));
+                connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this, liste_clients.get(0));
 
                 liste_des_interfaces.add(connex);
 
@@ -68,6 +68,5 @@ public class Serveur extends Thread {
                 ex.printStackTrace();
             }
         } while (true);
-
     }
 }
