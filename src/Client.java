@@ -17,7 +17,7 @@ public class Client extends JFrame {
     private JPanel couleur;
 
 
-    public Client(int x){
+    public Client(int x) throws HeadlessException{
         super();
         id_joueur = x;
 
@@ -46,11 +46,14 @@ public class Client extends JFrame {
 
         // On lance le socket du client
         try {
+            // On démarre le socket avec l'IP locale et le port 49512 arbitraire
             InetAddress ip = InetAddress.getLocalHost();
             System.out.println(ip);
             Socket soc = new Socket(ip, 49512);
+
+            // On ajoute l'interface au plateau pour qu'ils soient liés
             id_stream_output = new ObjectOutputStream(soc.getOutputStream());
-            le_plateau.setOut(out);
+            le_plateau.set_out(id_stream_output);
             interface_c = new Interface_client(soc, x, le_plateau);
             interface_c.start();
         } catch (UnknownHostException uhe) {

@@ -8,9 +8,9 @@ public class Plateau extends JPanel {
 
     private Pieces[][] matrice;
     private Color client;
-    // private ObjectOutputStream sortie;
+    private ObjectOutputStream sortie;
     // private int style; // Si on souhaite faire plusieurs styles de plateau
-    private int nb_lignes, nb_colonnes;
+    private int nb_lignes, nb_colonnes = 8; // Plateau d'échecs = 8x8
 
     public Plateau(Color le_client) {
         // Instancier tous les pions et leurs positions de base dans le constructeur
@@ -50,4 +50,8 @@ public class Plateau extends JPanel {
     // pions noirs jouent
 
     // Implémenter le 1 click highlight et le drag&drop
+
+    public void set_out(ObjectOutputStream la_sortie){
+        this.sortie = la_sortie;
+    }
 }
