@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.util.*;
 
+
+import java.util.*;
+import javax.swing.*;
+
 public class Pion extends Pieces {
 
     public Pion(int num_ligne, int num_colonne, Client proprietaire, boolean a_bouge, List<String> liste_deplacement, Image icon, boolean est_blanc) {
