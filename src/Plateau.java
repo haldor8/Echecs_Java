@@ -8,41 +8,41 @@ import java.util.*;
 public class Plateau extends JPanel {
 
     private Pieces[][] matrice;
-    private Color client;
+    private int id_joueur;
     private ObjectOutputStream sortie;
     // private int style; // Si on souhaite faire plusieurs styles de plateau
-    private int nb_lignes, nb_colonnes = 8; // Plateau d'échecs = 8x8
+    public static int nb_lignes = 8, nb_colonnes = 8; // Plateau d'échecs = 8x8
 
-    public Plateau(Color le_client) {
+    public Plateau(int le_client) {
         // Instancier tous les pions et leurs positions de base dans le constructeur
         this.matrice = new Pieces[nb_lignes][nb_colonnes];
-        this.client = le_client;
+        this.id_joueur = le_client;
 
         for (int i = 0; i < nb_colonnes; i++) {
-            this.matrice[1][i] = new Pion(); // Placer les pions blancs
-            this.matrice[6][i] = new Pion(); // Placer les pions noirs
+            this.matrice[1][i] = new Pion(1, i, 0); // Placer les pions blancs
+            this.matrice[6][i] = new Pion(6, i, 1); // Placer les pions noirs
         }
 
         for (int i = 0; i < nb_colonnes; i += 7) {
-            this.matrice[0][i] = new Tour(); // Placer les tours blanches
-            this.matrice[7][i] = new Tour(); // Placer les tours noires
+            this.matrice[0][i] = new Tour(0, i, 0); // Placer les tours blanches
+            this.matrice[7][i] = new Tour(7, i, 1); // Placer les tours noires
         }
 
         for (int i = 1; i < nb_colonnes; i += 5) {
-            this.matrice[0][i] = new Cavalier(); // Placer les cavaliers blancs
-            this.matrice[7][i] = new Cavalier(); // Placer les cavaliers noirs
+            this.matrice[0][i] = new Cavalier(0, i, 0); // Placer les cavaliers blancs
+            this.matrice[7][i] = new Cavalier(7, i, 1); // Placer les cavaliers noirs
         }
 
         for (int i = 2; i < nb_colonnes; i += 3) {
-            this.matrice[0][i] = new Fou(); // Placer les fous blancs
-            this.matrice[7][i] = new Fou(); // Placer les fous noirs
+            this.matrice[0][i] = new Fou(0, i, 0); // Placer les fous blancs
+            this.matrice[7][i] = new Fou(7, i, 1); // Placer les fous noirs
         }
 
-        this.matrice[0][3] = new Reine(); // Placer la reine blanche
-        this.matrice[7][3] = new Reine(); // Placer la reine noire
+        this.matrice[0][3] = new Reine(0, 4, 0); // Placer la reine blanche
+        this.matrice[7][3] = new Reine(7, 4, 1); // Placer la reine noire
 
-        this.matrice[0][4] = new Roi(); // Placer la reine blanche
-        this.matrice[7][4] = new Roi(); // Placer la reine noire
+        this.matrice[0][4] = new Roi(0, 4, 0); // Placer la reine blanche
+        this.matrice[7][4] = new Roi(7, 4, 1); // Placer la reine noire
 
         // Combler le plateau avec des cases vides ou des pions vides jsp
     }

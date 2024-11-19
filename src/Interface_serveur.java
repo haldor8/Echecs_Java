@@ -55,7 +55,7 @@ public class Interface_serveur extends Thread {
                     System.out.println("Pion recu : " + pion_recu.toString());
                     
                     // Effectuer le traitement du coup ici
-                    for(Interface_serveur interf : le_serveur.get_liste_connexions()){
+                    for(Interface_serveur interf : le_serveur.get_liste_des_interfaces()){
                         sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
                         sortie.writeObject(pion_recu);
                     }

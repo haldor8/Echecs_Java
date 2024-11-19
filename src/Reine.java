@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.util.*;
 
-public class Reine extends Piece {
+public class Reine extends Pieces {
 
-    public Reine(String couleur) {
-        super(couleur);
+    public Reine(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
+        super(num_ligne, num_colonne, proprietaire/*, liste_deplacement, icone */);
     }
 
     @Override

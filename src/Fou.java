@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Fou extends Pieces {
 
-    public Fou(int num_ligne, int num_colonne, Client proprietaire, boolean a_bouge, List<String> liste_deplacement, Image icon, boolean est_blanc) {
-        super(num_ligne, num_colonne, proprietaire, a_bouge, liste_deplacement, icon, est_blanc);
+    public Fou(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
+        super(num_ligne, num_colonne, proprietaire/*, liste_deplacement, icone */);
     }
 
     @Override

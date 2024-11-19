@@ -32,7 +32,7 @@ public class Client extends JFrame {
             la_couleur = Color.BLACK;
         }
         couleur.setBackground(la_couleur);
-        le_plateau = new Plateau(la_couleur);
+        le_plateau = new Plateau(id_joueur);
 
         // On ajoute le plateau à l'UI
         this.add(le_plateau, BorderLayout.CENTER);

@@ -36,8 +36,8 @@ public class Serveur extends Thread {
         ui_serveur.setVisible(true);
 
         liste_des_interfaces = new LinkedList<>();
-
         liste_clients = new ArrayList<>();
+        liste_ip = new DefaultListModel();
 
         this.id_socket_serveur = new ServerSocket(49512); // numero de port un peu au hasard
     }
@@ -45,7 +45,6 @@ public class Serveur extends Thread {
     public void run() {
         Interface_serveur connex;
         do {
-
             try {
                 System.out.println("Serveur en attente");
                 Socket socket_client = id_socket_serveur.accept();
@@ -56,7 +55,7 @@ public class Serveur extends Thread {
                 connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this);
 
                 liste_des_interfaces.add(connex);
-
+        
                 System.out.println("nombre de clients connectés " + liste_clients.size());
                 connex.start();
             } catch (IOException e) {
@@ -72,5 +71,9 @@ public class Serveur extends Thread {
     // Méthode pour ajouter un client à la liste des clients du serveur
     public void ajouter_client(Client client) {
         liste_clients.add(client);
+    }
+
+    public LinkedList<Interface_serveur> get_liste_des_interfaces(){
+        return this.liste_des_interfaces;
     }
 }

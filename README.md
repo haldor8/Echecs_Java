@@ -4,4 +4,4 @@ Projet réalisé dans le cadre de notre cursus universitaire en informatique. Ce
 
 # Auteurs
 
-(Projet réalisé par Charles Iacopino, Mathéo Lancéa, Yasmina Moussaoui et Maxence Martin, étudiants en L3 Science du Numérique, dans le cadre de notre cours de Conception Logicielle).
+Projet réalisé par Charles Iacopino, Mathéo Lancéa, Yasmina Moussaoui et Maxence Martin, étudiants en L3 Science du Numérique, dans le cadre de notre cours de Conception Logicielle.
