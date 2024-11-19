@@ -25,7 +25,7 @@ public class Serveur extends Thread {
     public Serveur() throws IOException {
         super();
         ui_serveur = new JFrame();
-        
+
         ui_serveur.setSize(300, 300);
         ui_serveur.setLocation(0, 0);
         ui_serveur.setLayout(new BorderLayout());
@@ -38,7 +38,6 @@ public class Serveur extends Thread {
         liste_des_interfaces = new LinkedList<>();
 
         liste_clients = new ArrayList<>();
-
 
         this.id_socket_serveur = new ServerSocket(49512); // numero de port un peu au hasard
     }
@@ -53,8 +52,8 @@ public class Serveur extends Thread {
 
                 liste_ip.addElement("-->l'ip " + socket_client.getInetAddress() + " s'est connecte");
                 interface_liste_ip.setModel(liste_ip);
-                
-                connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this, liste_clients.get(0));
+
+                connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this);
 
                 liste_des_interfaces.add(connex);
 
@@ -68,5 +67,10 @@ public class Serveur extends Thread {
                 ex.printStackTrace();
             }
         } while (true);
+    }
+
+    // Méthode pour ajouter un client à la liste des clients du serveur
+    public void ajouter_client(Client client) {
+        liste_clients.add(client);
     }
 }
