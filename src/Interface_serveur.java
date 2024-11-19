@@ -42,7 +42,7 @@ public class Interface_serveur extends Thread {
         }
 
         Object obj = null;
-        Pion pion_recu = null;
+        Pieces piece_recu = null;
         do{
             System.out.println("Interface serveur " + this.id_joueur + " en attente de reception d'un objet");
             try{
@@ -50,14 +50,14 @@ public class Interface_serveur extends Thread {
                 System.out.println("Inter serv : " + this.id_joueur + " a recu un objet");
                 
 
-                if (obj instanceof Pion){
-                    pion_recu = (Pion)obj;
-                    System.out.println("Pion recu : " + pion_recu.toString());
+                if (obj instanceof Pieces){
+                    piece_recu = (Pieces)obj;
+                    System.out.println("Pion recu : " + piece_recu.toString());
                     
                     // Effectuer le traitement du coup ici
                     for(Interface_serveur interf : le_serveur.get_liste_des_interfaces()){
                         sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
-                        sortie.writeObject(pion_recu);
+                        sortie.writeObject(piece_recu);
                     }
                 }// else if (instanceof Message_interne) ...
             }catch(Exception exep){

@@ -25,12 +25,20 @@ public class Client extends JFrame {
 
         couleur = new JPanel();
 
-        Color la_couleur;
-        if(id_joueur == 0){ // Joueur 0 = blanc
-            la_couleur = Color.GRAY; // Gris pour une question de contraste, peut-être modifié
-        }else{
-            la_couleur = Color.BLACK;
+        Color la_couleur = null;
+        try{
+            if(id_joueur == 1){ // Joueur 1 = blanc
+                la_couleur = Color.GRAY; // Gris pour une question de contraste, peut-être modifié
+            }else if (id_joueur == 2){
+                la_couleur = Color.BLACK;
+            }else{
+                throw new Exception("Id joueur inconnu");
+            }
+        }catch(Exception exep){
+            System.out.println(exep);
+            System.exit(-1);
         }
+        
         couleur.setBackground(la_couleur);
         le_plateau = new Plateau(id_joueur);
 

@@ -13,8 +13,8 @@ public class Main {
         }
 
         try {
-            Client c1 = new Client(0);
-            Client c2 = new Client(1);
+            Client c1 = new Client(1);
+            Client c2 = new Client(2);
 
             // Ajouter les clients au serveur correspondant
             le_serveur.ajouter_client(c1);
