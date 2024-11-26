@@ -5,7 +5,7 @@ public class Cavalier extends Pieces {
 
 
     public Cavalier(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
-        super(num_ligne, num_colonne, proprietaire/*, liste_deplacement, icone */);
+        super(num_ligne, num_colonne, proprietaire);
         chargerIcon("Pieces/cavalier_" + this.get_Couleur_String()+ ".svg");
     }
 
