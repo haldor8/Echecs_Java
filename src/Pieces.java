@@ -1,6 +1,13 @@
 import java.io.Serializable;
 import javax.swing.*;
 import java.util.*;
+import org.apache.batik.transcoder.*;
+import org.apache.batik.transcoder.image.*;
+import org.apache.batik.anim.dom.*;
+import org.w3c.dom.Document;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 
 // Décris les informations des pièces
@@ -11,6 +18,7 @@ public class Pieces implements Serializable {
     private boolean a_bouge = false;
     private List<String> liste_deplacement;
     private ImageIcon icon;
+    private int couleur; // 0 pour blanc, 1 pour noir
 
     public Pieces(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icon */) {
         this.num_ligne = num_ligne;
@@ -21,7 +29,7 @@ public class Pieces implements Serializable {
         this.icon = icon;
         */
     }
-    
+
     public int get_num_ligne() {
         return num_ligne;
     }
@@ -33,6 +41,7 @@ public class Pieces implements Serializable {
     public int get_proprietaire() {
         return proprietaire;
     }
+    public int getCouleur(){return couleur;}
 
     public boolean a_bouge() {
         return a_bouge;
@@ -44,5 +53,37 @@ public class Pieces implements Serializable {
 
     public ImageIcon get_icon() {
         return icon;
+    }
+
+    public void chargerIcon(String cheminSVG) {
+        try {
+            // Transcodeur pour convertir SVG en BufferedImage
+            TranscoderInput input = new TranscoderInput(new File(cheminSVG).toURI().toString());
+            BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
+
+            transcoder.transcode(input, null);
+            BufferedImage image = transcoder.getBufferedImage();
+            icon = new ImageIcon(image); // Convertir en ImageIcon
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static class BufferedImageTranscoder extends ImageTranscoder {
+        private BufferedImage image;
+
+        @Override
+        public BufferedImage createImage(int width, int height) {
+            return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        }
+
+        @Override
+        public void writeImage(BufferedImage image, TranscoderOutput output) {
+            this.image = image;
+        }
+
+        public BufferedImage getBufferedImage() {
+            return image;
+        }
     }
 }
