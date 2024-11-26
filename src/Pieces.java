@@ -3,11 +3,9 @@ import javax.swing.*;
 import java.util.*;
 import org.apache.batik.transcoder.*;
 import org.apache.batik.transcoder.image.*;
-import org.apache.batik.anim.dom.*;
-import org.w3c.dom.Document;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.imageio.ImageIO;
 
 
 // Décris les informations des pièces
@@ -18,12 +16,14 @@ public class Pieces implements Serializable {
     private boolean a_bouge = false;
     private List<String> liste_deplacement;
     private ImageIcon icon;
-    private int couleur; // 0 pour blanc, 1 pour noir
+    private int couleur; // 1 pour blanc, 2 pour noir
+    private String la_couleur; //noir ou blanc
 
     public Pieces(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icon */) {
         this.num_ligne = num_ligne;
         this.num_colonne = num_colonne;
         this.proprietaire = proprietaire;
+        la_couleur = proprietaire == 1 ? "blanc" : "noir";
         /*
         this.liste_deplacement = liste_deplacement;
         this.icon = icon;
@@ -41,7 +41,9 @@ public class Pieces implements Serializable {
     public int get_proprietaire() {
         return proprietaire;
     }
-    public int getCouleur(){return couleur;}
+    public int get_Couleur(){return couleur;}
+    //retourne la couleur (noir ou blanc, plutôt que le  int qui est utile pour certaines manips)
+    public String get_Couleur_String(){return la_couleur;}
 
     public boolean a_bouge() {
         return a_bouge;

@@ -1,10 +1,8 @@
-import javax.swing.*;
-import java.util.*;
-
 public class Reine extends Pieces {
 
     public Reine(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
         super(num_ligne, num_colonne, proprietaire/*, liste_deplacement, icone */);
+        chargerIcon("Pieces/reine_" + this.get_Couleur_String() + ".svg");
     }
 
 
@@ -12,7 +10,7 @@ public class Reine extends Pieces {
         int delta_x = Math.abs(x_final - x_initial);
         int delta_y = Math.abs(y_final - y_initial);
 
-        if (echiquier[x_final][y_final] != null && echiquier[x_final][y_final].getCouleur()==(this.getCouleur())) {
+        if (echiquier[x_final][y_final] != null && echiquier[x_final][y_final].get_Couleur()==(this.get_Couleur())) {
             return false;
         }
 

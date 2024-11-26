@@ -6,6 +6,7 @@ public class Cavalier extends Pieces {
 
     public Cavalier(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
         super(num_ligne, num_colonne, proprietaire/*, liste_deplacement, icone */);
+        chargerIcon("Pieces/cavalier_" + this.get_Couleur_String()+ ".svg");
     }
 
     public boolean deplacement_valide(int x_initial, int y_initial, int x_final, int y_final, Pieces[][] echiquier) {

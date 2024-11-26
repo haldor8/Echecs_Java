@@ -5,8 +5,7 @@ public class Fou extends Pieces {
 
     public Fou(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
         super(num_ligne, num_colonne, proprietaire);
-        String couleur = proprietaire == 0 ? "blanc" : "noir";
-        chargerIcon("Pieces/fou_" + couleur + ".svg");
+        chargerIcon("Pieces/fou_" + this.get_Couleur_String() + ".svg");
     }
 
 

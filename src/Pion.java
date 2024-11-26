@@ -1,12 +1,8 @@
-import javax.swing.*;
-import java.util.*;
-
 public class Pion extends Pieces {
 
     public Pion(int num_ligne, int num_colonne, int proprietaire) {
         super(num_ligne, num_colonne, proprietaire);
-        String couleur = proprietaire == 0 ? "blanc" : "noir";
-        chargerIcon("Pieces/pion_" + couleur + ".svg");
+        chargerIcon("Pieces/pion_" + this.get_Couleur_String() + ".svg");
     }
     public boolean deplacement_valide(int x_initial, int y_initial, int x_final, int y_final, Pieces[][] echiquier) {
         int delta_x = Math.abs(x_final - x_initial);

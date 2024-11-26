@@ -20,6 +20,7 @@ public class Plateau extends JPanel {
 
         for (int i = 0; i < nb_colonnes; i++) {
             this.matrice[1][i] = new Pion(1, i, 0); // Placer les pions blancs
+            JLabel label = new JLabel(matrice[1][i].get_icon());
             this.matrice[6][i] = new Pion(6, i, 1); // Placer les pions noirs
         }
 
