@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Tour extends Pieces {
 
-    public Tour(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
-        super(num_ligne, num_colonne, proprietaire/*, liste_deplacement, icone */);
+    public Tour( int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
+        super( proprietaire/*, liste_deplacement, icone */);
         chargerIcon("Pieces/tour_" +this.get_Couleur_String() + ".svg");
     }
 

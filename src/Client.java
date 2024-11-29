@@ -18,7 +18,7 @@ public class Client extends JFrame {
 
 
     public Client(int x) throws HeadlessException{
-        super();
+        super("Joueur "+x);
         id_joueur = x;
 
         this.setLayout(new BorderLayout());

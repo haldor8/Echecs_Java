@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.Serializable;
 import javax.swing.*;
 import java.util.*;
@@ -6,12 +7,11 @@ import org.apache.batik.transcoder.image.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 
 
 // Décris les informations des pièces
 public class Pieces implements Serializable {
-    private int num_ligne;
-    private int num_colonne;
     private int proprietaire;
     private boolean a_bouge = false;
     private List<String> liste_deplacement;
@@ -19,23 +19,13 @@ public class Pieces implements Serializable {
     private int couleur; // 1 pour blanc, 2 pour noir
     private String la_couleur; //noir ou blanc
 
-    public Pieces(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icon */) {
-        this.num_ligne = num_ligne;
-        this.num_colonne = num_colonne;
+    public Pieces(int proprietaire/*, List<String> liste_deplacement, ImageIcon icon */) {
         this.proprietaire = proprietaire;
         la_couleur = proprietaire == 1 ? "blanc" : "noir";
         /*
         this.liste_deplacement = liste_deplacement;
         this.icon = icon;
         */
-    }
-
-    public int get_num_ligne() {
-        return num_ligne;
-    }
-
-    public int get_num_colonne() {
-        return num_colonne;
     }
 
     public int get_proprietaire() {
@@ -76,8 +66,13 @@ public class Pieces implements Serializable {
 
         @Override
         public BufferedImage createImage(int width, int height) {
-            return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.dispose();
+            return bufferedImage;
         }
+
 
         @Override
         public void writeImage(BufferedImage image, TranscoderOutput output) {

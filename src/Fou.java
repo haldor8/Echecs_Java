@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Fou extends Pieces {
 
-    public Fou(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
-        super(num_ligne, num_colonne, proprietaire);
+    public Fou( int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
+        super(proprietaire);
         chargerIcon("Pieces/fou_" + this.get_Couleur_String() + ".svg");
     }
 
