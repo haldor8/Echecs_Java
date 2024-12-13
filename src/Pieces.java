@@ -1,25 +1,27 @@
 import java.io.Serializable;
+import javax.swing.*;
+import java.util.*;
+
 
 // Décris les informations des pièces
 public class Pieces implements Serializable {
     private int num_ligne;
     private int num_colonne;
-    private Client proprietaire;
-    private boolean a_bouge;
+    private int proprietaire;
+    private boolean a_bouge = false;
     private List<String> liste_deplacement;
-    private Image icon;
-    private boolean estBlanc;
+    private ImageIcon icon;
 
-    public Pieces(int num_ligne, int num_colonne, Client proprietaire, boolean a_bouge, List<String> liste_deplacement, Image icon, boolean estBlanc) {
+    public Pieces(int num_ligne, int num_colonne, int proprietaire/*, List<String> liste_deplacement, ImageIcon icon */) {
         this.num_ligne = num_ligne;
         this.num_colonne = num_colonne;
         this.proprietaire = proprietaire;
-        this.a_bouge = a_bouge;
+        /*
         this.liste_deplacement = liste_deplacement;
         this.icon = icon;
-        this.estBlanc = estBlanc;
+        */
     }
-
+    
     public int get_num_ligne() {
         return num_ligne;
     }
@@ -28,7 +30,7 @@ public class Pieces implements Serializable {
         return num_colonne;
     }
 
-    public Client get_proprietaire() {
+    public int get_proprietaire() {
         return proprietaire;
     }
 
@@ -40,11 +42,31 @@ public class Pieces implements Serializable {
         return liste_deplacement;
     }
 
-    public Image get_icon() {
+    public ImageIcon get_icon() {
         return icon;
     }
 
-    public boolean est_blanc() {
-        return estBlanc;
+
+
+
+    public abstract class Pieces {
+        private int x, y;
+        private int proprietaire; 
+    
+        public abstract List<Point> mouvements_possibles(Pieces[][] echiquier);
+    
+        public int getX() {
+            return x;
+        }
+    
+        public int getY() {
+            return y;
+        }
+    
+        public int get_proprietaire() {
+            return proprietaire;
+        }
     }
+    
 }
+
