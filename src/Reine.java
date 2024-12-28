@@ -1,7 +1,7 @@
 public class Reine extends Pieces {
 
-    public Reine( int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
-        super( proprietaire/*, liste_deplacement, icone */);
+    public Reine( int proprietaire) {
+        super( proprietaire);
         chargerIcon("Pieces/reine_" + this.get_Couleur_String() + ".svg");
     }
 

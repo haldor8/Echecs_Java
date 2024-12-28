@@ -13,19 +13,13 @@ import java.util.List;
 // Décris les informations des pièces
 public class Pieces implements Serializable {
     private int proprietaire;
-    private boolean a_bouge = false;
-    private List<String> liste_deplacement;
     private ImageIcon icon;
     private int couleur; // 1 pour blanc, 2 pour noir
     private String la_couleur; //noir ou blanc
 
-    public Pieces(int proprietaire/*, List<String> liste_deplacement, ImageIcon icon */) {
+    public Pieces(int proprietaire) {
         this.proprietaire = proprietaire;
         la_couleur = proprietaire == 1 ? "blanc" : "noir";
-        /*
-        this.liste_deplacement = liste_deplacement;
-        this.icon = icon;
-        */
     }
 
     public int get_proprietaire() {
@@ -35,13 +29,6 @@ public class Pieces implements Serializable {
     //retourne la couleur (noir ou blanc, plutôt que le  int qui est utile pour certaines manips)
     public String get_Couleur_String(){return la_couleur;}
 
-    public boolean a_bouge() {
-        return a_bouge;
-    }
-
-    public List<String> get_liste_deplacement() {
-        return liste_deplacement;
-    }
 
     public ImageIcon get_icon() {
         return icon;

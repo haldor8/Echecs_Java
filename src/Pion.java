@@ -1,7 +1,7 @@
 public class Pion extends Pieces {
 
     public Pion(int proprietaire) {
-        super( proprietaire/*, liste_deplacement, icone */);
+        super( proprietaire);
         chargerIcon("Pieces/pion_" + this.get_Couleur_String() + ".svg");
     }
     public boolean deplacement_valide(int x_initial, int y_initial, int x_final, int y_final, Pieces[][] echiquier) {
@@ -18,9 +18,6 @@ public class Pion extends Pieces {
             return true;
         }
 
-        if (!this.a_bouge() && delta_x == 0 && delta_y == 2 * direction && echiquier[x_final][y_final] == null && echiquier[x_initial][y_initial + direction] == null) {
-            return true;
-        }
 
         if (delta_x == 1 && delta_y == direction && echiquier[x_final][y_final] != null && !(echiquier[x_final][y_final].get_proprietaire() == (this.get_proprietaire()))) {
             return true;

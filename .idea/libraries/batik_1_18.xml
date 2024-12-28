@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="batik-1.18">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/batik-ttf2svg-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/batik-rasterizer-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/batik-svgpp-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/batik-squiggle-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/batik-slideshow-1.18.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,43 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-anim-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-test-swing-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-swing-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-test-old-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-transcoder-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-svg-dom-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-svgrasterizer-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-util-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/xml-apis-ext-1.3.04.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-test-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-awt-util-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-i18n-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-script-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-bridge-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-codec-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-all-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-css-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-dom-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/xmlgraphics-commons-2.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-ext-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-util-1.18-tests.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-svgbrowser-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-shared-resources-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/rhino-1.7.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-xml-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/fop-transcoder-allinone-2.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-parser-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/xml-apis-1.4.01.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-constants-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-gui-util-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-test-svg-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/serializer-2.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-extension-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-gvt-1.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-1.18/lib/batik-svggen-1.18.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

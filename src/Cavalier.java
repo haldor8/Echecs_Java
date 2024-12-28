@@ -4,7 +4,7 @@ import java.util.*;
 public class Cavalier extends Pieces {
 
 
-    public Cavalier(int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
+    public Cavalier(int proprietaire) {
         super( proprietaire);
         chargerIcon("Pieces/cavalier_" + this.get_Couleur_String()+ ".svg");
     }

@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Roi extends Pieces {
 
-    public Roi(int proprietaire/*, List<String> liste_deplacement, ImageIcon icone */) {
-        super(proprietaire/*, liste_deplacement, icone */);
+    public Roi(int proprietaire) {
+        super(proprietaire);
         chargerIcon("Pieces/roi_" + this.get_Couleur_String()+ ".svg");
     }
 
