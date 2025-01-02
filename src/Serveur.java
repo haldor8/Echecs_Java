@@ -1,10 +1,12 @@
-import java.awt.*;
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.ServerSocket;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
 import java.util.List;
-import javax.swing.*;
 
 // Gère les connexions des joueurs
 public class Serveur extends Thread {
@@ -50,14 +52,12 @@ public class Serveur extends Thread {
                 liste_ip.addElement("-->l'ip " + socket_client.getInetAddress() + " s'est connecte");
                 interface_liste_ip.setModel(liste_ip);
                 
-                if(liste_clients.size() > 0){
-                    connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this);
+                connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this);
 
-                    liste_des_interfaces.add(connex);
-            
-                    System.out.println("nombre de clients connectés " + liste_clients.size());
-                    connex.start();
-                }
+                liste_des_interfaces.add(connex);
+        
+                System.out.println("nombre de clients connectés " + liste_clients.size());
+                connex.start();
             } catch (IOException e) {
                 System.out.println("IOException coté serveur : ");
                 e.printStackTrace();
