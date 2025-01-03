@@ -1,5 +1,6 @@
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import javax.swing.*;
@@ -48,51 +49,73 @@ public class Plateau extends JPanel {
         // Mettre à jour l'affichage graphique
         mettre_a_jour_affichage();
 
-        this.addMouseListener(new MouseAdapter(){
+        this.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e){
-                int ligne = (int)(e.getX()/(getSize().getWidth()/8));
-                int colonne = (int)(e.getY()/(getSize().getHeight()/8));
-                System.out.println("Appuye en :\nX=" + ligne + " Y=" + colonne);
+            public void mousePressed(MouseEvent e) {
+                // Récupérer les coordonnées de la case cliquée
+                int ligne = (int) (e.getY() / (getSize().getHeight() / 8)); // Ligne
+                int colonne = (int) (e.getX() / (getSize().getWidth() / 8)); // Colonne
+                System.out.println("Appuyé en : Ligne = " + ligne + ", Colonne = " + colonne);
 
-                if(ligne_buffer == -1){
-                    if(matrice[ligne][colonne] != null) {
-                        if(matrice[ligne][colonne].get_proprietaire() == id_joueur){
-                            maj_buffer(ligne, colonne);
-                            System.out.println(matrice[ligne][colonne]);
-                            // afficher_deplacements();
+                // Si aucune pièce n'est encore sélectionnée
+                if (ligne_buffer == -1) {
+                    if (matrice[ligne][colonne] != null) {
+                        // Vérifie si la pièce appartient au joueur actif
+                        if (matrice[ligne][colonne].get_proprietaire() == id_joueur) {
+                            maj_buffer(ligne, colonne); // Stocke la sélection courante
+                            System.out.println("Pièce sélectionnée : " + matrice[ligne][colonne].getClass().getSimpleName());
                         }
                     }
-                }else{
-                    // Si la pièce déjà sélectionnée est différente de la pièce dans le buffer
-                    if(!matrice[ligne][colonne].equals(matrice[ligne_buffer][colonne_buffer])
-                            && matrice[ligne_buffer][colonne_buffer].get_proprietaire() != matrice[ligne][colonne].get_proprietaire()){
-                        // Vérifier
-                        // Envoyer le déplacement au serveur
-                        /*
-                        Deplacement depl = new Deplacement()
-                        try{
-                            sortie.writeObject(depl);
-                        }catch(IOException ex){
-                            // gérer
-                        }
-                         */
-                        // Flush le buffer
-                        clear_buffer();
-                    }
+                } else {
+                    System.out.println("Une pièce est déjà sélectionnée !");
                 }
             }
 
-            public void mouseReleased(MouseEvent e){
-                int ligne = (int)(e.getX()/(getSize().getWidth()/8));
-                int colonne = (int)(e.getY()/(getSize().getHeight()/8));
-                System.out.println("Relache en :\nX=" + ligne + " Y=" + colonne);
-                if(ligne_buffer != -1){
-                    if(ligne != ligne_buffer && colonne != colonne_buffer){
-                        // Vérifier
-                        // Envoyer
-                        clear_buffer();
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // Récupérer les coordonnées de la case cible
+                int ligne = (int) (e.getY() / (getSize().getHeight() / 8)); // Ligne
+                int colonne = (int) (e.getX() / (getSize().getWidth() / 8)); // Colonne
+                System.out.println("Relâché en : Ligne = " + ligne + ", Colonne = " + colonne);
+
+                // Si une pièce a été sélectionnée
+                if (ligne_buffer != -1 && colonne_buffer != -1) {
+                    Pieces piece = matrice[ligne_buffer][colonne_buffer]; // La pièce sélectionnée
+
+                    // Vérifier que la pièce n'est pas null
+                    if (piece != null) {
+                        System.out.println("Tentative de déplacement de " + piece.getClass().getSimpleName() +
+                                " de [" + ligne_buffer + ", " + colonne_buffer + "] vers [" + ligne + ", " + colonne + "]");
+
+                        // Appeler `deplacement_valide` propre à la pièce
+                        if (piece.deplacement_valide(ligne_buffer, colonne_buffer, ligne, colonne, matrice)) {
+                            System.out.println("Déplacement valide ! Mise à jour de la matrice.");
+
+                            // Actualiser la matrice pour bouger la pièce
+                            matrice[ligne][colonne] = piece; // Positionner la pièce à la nouvelle case
+                            matrice[ligne_buffer][colonne_buffer] = null; // Vider l'ancienne case
+
+                            // Mettre à jour l'affichage du plateau
+                            mettre_a_jour_affichage();
+
+                            // Exemple : Envoyer le mouvement au serveur
+                            try {
+                                int[] mouvement = {ligne_buffer, colonne_buffer, ligne, colonne}; // Tableau du mouvement
+                                sortie.writeObject(mouvement); // Envoi au serveur
+                                sortie.flush();
+                                System.out.println("Déplacement synchronisé avec le serveur.");
+                            } catch (IOException ex) {
+                                System.out.println("Erreur d'envoi au serveur : " + ex.getMessage());
+                            }
+                        } else {
+                            System.out.println("Déplacement invalide !");
+                        }
+                    } else {
+                        System.out.println("Aucune pièce sélectionnée.");
                     }
+
+                    // Réinitialiser le buffer
+                    clear_buffer();
                 }
             }
         });

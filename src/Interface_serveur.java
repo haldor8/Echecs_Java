@@ -1,68 +1,82 @@
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 // Permet d'envoyer des messages aux clients
 public class Interface_serveur extends Thread {
-    // On vérifie les coups à la réception du message, si invalide on le refuse, si valide on envoie le deplacement à effectuer aux clients
-    // On change le joueur s'il est valide
-
     private final Socket id_socket_client;
     private ObjectInputStream entree;
     private ObjectOutputStream sortie;
 
-    private Serveur le_serveur;
-    private int id_joueur;
+    private final Serveur le_serveur;
+    private final int id_joueur;
 
-    public Interface_serveur(Socket soc, int num, Serveur s){
+    public Interface_serveur(Socket soc, int num, Serveur s) {
         this.id_socket_client = soc;
         this.id_joueur = num;
         le_serveur = s;
 
-        // Demarrer le lien entre l'interface serveur et celles des clients
+        // Initialize streams for communication
         try {
-            System.out.println("Tentative d'initialisation du flux d'entrée pour interface serveur " + num);
+            System.out.println("Tentative d'initialisation des flux pour l'interface serveur " + num);
+            sortie = new ObjectOutputStream(id_socket_client.getOutputStream());
+            sortie.flush(); // Flush header to avoid potential stream corruption
             entree = new ObjectInputStream(id_socket_client.getInputStream());
-            System.out.println("Flux d'entrée initialisé avec succès pour interface serveur " + num);
+            System.out.println("Flux initialisés avec succès pour l'interface serveur " + num);
         } catch (Exception ex) {
-            System.out.println("Erreur lors de l'initialisation du flux d'entrée pour interface serveur " + num);
+            System.out.println("Erreur lors de l'initialisation des flux pour l'interface serveur " + num);
             ex.printStackTrace();
         }
     }
 
     @Override
-    public void run(){
-        System.out.println("Interface serveur du client : " + id_joueur + " lancee");
+    public void run() {
+        System.out.println("Interface serveur démarrée pour le joueur " + id_joueur);
 
-        // On se branche sur la sortie du client
-        try{
-            entree = new ObjectInputStream(this.id_socket_client.getInputStream());
-        }catch(Exception exep){
-            System.out.println("Probleme lors de la recup de l'interface serveur du client : " + this.id_joueur);
-        }
+        while (true) {
+            try {
+                Object obj = entree.readObject(); // Objet reçu du client
+                if (obj instanceof int[]) {
+                    int[] mouvement = (int[]) obj; // Format : {x_initial, y_initial, x_final, y_final}
+                    System.out.println("Mouvement reçu : " + Arrays.toString(mouvement));
 
-        Object obj = null;
-        Pieces piece_recu = null;
-        do{
-            System.out.println("Interface serveur " + this.id_joueur + " en attente de reception d'un objet");
-            try{
-                obj = entree.readObject();
-                System.out.println("Inter serv : " + this.id_joueur + " a recu un objet");
-                
-
-                if (obj instanceof Pieces){
-                    piece_recu = (Pieces)obj;
-                    System.out.println("Pion recu : " + piece_recu.toString());
-                    
-                    // Effectuer le traitement du coup ici
-                    for(Interface_serveur interf : le_serveur.get_liste_des_interfaces()){
-                        sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
-                        sortie.writeObject(piece_recu);
+                    // Validate movement logic here
+                    boolean valide = validerMouvement(mouvement);
+                    if (valide) {
+                        System.out.println("Mouvement valide, diffusion aux clients.");
+                        notifierTousLesClients(mouvement);
+                    } else {
+                        System.out.println("Mouvement invalide, rejeté.");
                     }
-                }// else if (instanceof Message_interne) ...
-            }catch(Exception exep){
-                System.out.println("Erreur dans le thread de l'interf serveur du joueur : " + this.id_joueur + exep.toString());
+                }
+            } catch (Exception e) {
+                System.out.println("Erreur dans l'interface serveur du joueur " + id_joueur);
+                e.printStackTrace();
+                break;
             }
-        }while(obj != null);
+        }
+    }
+
+    // Méthode pour valider un mouvement
+    private boolean validerMouvement(int[] mouvement) {
+        // Logic validation of movement (to be implemented)
+        return true; // For now, always valid
+    }
+
+    // Méthode pour notifier tous les clients
+    private void notifierTousLesClients(int[] mouvement) {
+        for (Interface_serveur interfaceServeur : le_serveur.get_liste_des_interfaces()) {
+            try {
+                synchronized (interfaceServeur.sortie) {
+                    interfaceServeur.sortie.writeObject(mouvement);
+                    interfaceServeur.sortie.flush();
+                }
+            } catch (IOException e) {
+                System.out.println("Erreur lors de l'envoi du mouvement au client.");
+                e.printStackTrace();
+            }
+        }
     }
 }

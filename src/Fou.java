@@ -13,27 +13,27 @@ public class Fou extends Pieces {
         int delta_x = Math.abs(x_final - x_initial);
         int delta_y = Math.abs(y_final - y_initial);
 
-        if (echiquier[x_final][y_final] != null && echiquier[x_final][y_final].get_proprietaire() == (this.get_proprietaire())) {
-            return false;
+        if (echiquier[x_final][y_final] != null &&
+                echiquier[x_final][y_final].get_proprietaire() == this.get_proprietaire()) {
+            return false; // Ne pas capturer ses propres pièces
         }
 
-        if (delta_x == delta_y) {
+        if (delta_x == delta_y) { // Déplacement en diagonale
             int step_x = Integer.compare(x_final, x_initial);
             int step_y = Integer.compare(y_final, y_initial);
 
+            // Vérification des cases intermédiaires
             int x = x_initial + step_x;
             int y = y_initial + step_y;
-
             while (x != x_final || y != y_final) {
                 if (echiquier[x][y] != null) {
-                    return false;
+                    return false; // Une case est bloquée
                 }
                 x += step_x;
                 y += step_y;
             }
             return true;
         }
-        return false;
-    }
-}
+        return false; // Si aucune condition n'est valide
+    }}
 

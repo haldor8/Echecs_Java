@@ -40,32 +40,28 @@ public class Serveur extends Thread {
         this.id_socket_serveur = new ServerSocket(49512); // numero de port un peu au hasard
     }
 
+
     public void run() {
         Interface_serveur connex;
+        boolean continuer = true;
         do {
             try {
                 System.out.println("Serveur en attente");
                 Socket socket_client = id_socket_serveur.accept();
-
                 liste_ip.addElement("-->l'ip " + socket_client.getInetAddress() + " s'est connecte");
                 interface_liste_ip.setModel(liste_ip);
-                
-                if(liste_clients.size() > 0){
-                    connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this);
 
-                    liste_des_interfaces.add(connex);
-            
-                    System.out.println("nombre de clients connectés " + liste_clients.size());
-                    connex.start();
-                }
+                connex = new Interface_serveur(socket_client, 1, this); // ID modifiable pour plusieurs joueurs
+                liste_des_interfaces.add(connex);
+                connex.start();
+
+                System.out.println("Nombre de clients connectés " + liste_des_interfaces.size());
             } catch (IOException e) {
-                System.out.println("IOException coté serveur : ");
+                continuer = false;
+                System.out.println("IOException côté serveur : ");
                 e.printStackTrace();
-            } catch (Exception ex) {
-                System.out.println("Exception inconnue coté serveur : ");
-                ex.printStackTrace();
             }
-        } while (true);
+        } while (continuer);
     }
 
     // Méthode pour ajouter un client à la liste des clients du serveur

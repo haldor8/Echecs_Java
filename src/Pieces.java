@@ -48,6 +48,10 @@ public class Pieces implements Serializable {
         }
     }
 
+    public boolean deplacement_valide(int ligneBuffer, int colonneBuffer, int ligne, int colonne, Pieces[][] matrice) {
+        return false;
+    }
+
     private static class BufferedImageTranscoder extends ImageTranscoder {
         private BufferedImage image;
 
