@@ -191,6 +191,7 @@ public class Plateau extends JPanel {
         }
         envoyer_deplacement_au_serveur(x1, y1, x2, y2);
         mettre_a_jour_affichage(); // Mettre à jour le plateau après le déplacement
+        reinitialiserCouleursCases();
         recevoirDeplacementDuServeur();
 
     }
@@ -271,5 +272,20 @@ public class Plateau extends JPanel {
 
     public static int getNb_colonnes() {
         return nb_colonnes;
+    }
+
+    // Méthode pour réinitialiser les couleurs des cases à leurs valeurs par défaut
+    private void reinitialiserCouleursCases() {
+        for (int i = 0; i < nb_lignes; i++) {
+            for (int j = 0; j < nb_colonnes; j++) {
+                JPanel case_panel = cases_graphiques[i][j];
+                // Réinitialiser la couleur des cases
+                if ((i + j) % 2 == 0) {
+                    case_panel.setBackground(new Color(238, 238, 210)); // clair
+                } else {
+                    case_panel.setBackground(new Color(118, 150, 86)); // foncé
+                }
+            }
+        }
     }
 }

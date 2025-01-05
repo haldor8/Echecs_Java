@@ -8,6 +8,23 @@ public class Interface_client extends Thread {
     // Mettre à jour le plateau côté client si on reçoit un coup
 
     private Socket id_socket_client;
+
+    public ObjectOutputStream getSortie() {
+        return sortie;
+    }
+
+    public void setSortie(ObjectOutputStream sortie) {
+        this.sortie = sortie;
+    }
+
+    public ObjectInputStream getEntree() {
+        return entree;
+    }
+
+    public void setEntree(ObjectInputStream entree) {
+        this.entree = entree;
+    }
+
     private ObjectInputStream entree;
     private ObjectOutputStream sortie;
     private Plateau le_plateau;
