@@ -157,9 +157,9 @@ public class Plateau extends JPanel {
         for (int[] deplacement : deplacements_possibles) {
             int displayI = ajusterCoordonneesPourJoueur(deplacement[0], false);
             int displayJ = ajusterCoordonneesPourJoueur(deplacement[1], true);
-            if(matrice[displayI][displayJ]!=null){
+            if(matrice[displayI][displayJ]!=null && matrice[displayI][displayJ].get_proprietaire() != la_piece.get_proprietaire()){
                 JPanel case_panel = cases_graphiques[displayI][displayJ];
-                case_panel.setBackground(new Color(233, 80, 10)); // rouge
+                case_panel.setBackground(new Color(233, 85, 20)); // rouge
             }
             else {
                 JPanel case_panel = cases_graphiques[displayI][displayJ];
@@ -171,6 +171,9 @@ public class Plateau extends JPanel {
     }
 
     private void effectuer_deplacement(int x1, int y1, int x2, int y2) {
+
+        set_in(entree);
+        set_out(sortie);
 
         Pieces piece = matrice[x1][y1];
         matrice[x1][y1] = null;
