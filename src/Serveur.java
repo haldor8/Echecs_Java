@@ -20,6 +20,8 @@ public class Serveur extends Thread {
     private LinkedList<Interface_serveur> liste_des_interfaces;
     private List<Client> liste_clients;
 
+    private static int numero_client = 0;
+
     public Serveur() throws IOException {
         super();
         ui_serveur = new JFrame();
@@ -49,15 +51,15 @@ public class Serveur extends Thread {
 
                 liste_ip.addElement("-->l'ip " + socket_client.getInetAddress() + " s'est connecte");
                 interface_liste_ip.setModel(liste_ip);
-                
-                if(liste_clients.size() > 0){
-                    connex = new Interface_serveur(socket_client, liste_clients.get(0).get_id_joueur(), this);
 
-                    liste_des_interfaces.add(connex);
-            
-                    System.out.println("nombre de clients connectés " + liste_clients.size());
-                    connex.start();
-                }
+                connex = new Interface_serveur(socket_client, ++numero_client, this);
+
+                liste_des_interfaces.add(connex);
+
+
+                System.out.println("Nombre de sockets connectes : " + liste_des_interfaces.size());
+                System.out.println("nombre de clients connectés " + liste_clients.size());
+                connex.start();
             } catch (IOException e) {
                 System.out.println("IOException coté serveur : ");
                 e.printStackTrace();

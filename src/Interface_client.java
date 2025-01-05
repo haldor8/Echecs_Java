@@ -53,14 +53,16 @@ public class Interface_client extends Thread {
                 entree = new ObjectInputStream(id_socket_client.getInputStream()); // On lit le flux d'entrée pour récupérer les objets envoyés
                 obj = entree.readObject(); // L'objet que reçoit l'interface
 
-                if(obj instanceof Pion){
-                    Pion pion_recu = (Pion)obj;
-                    // System.out.println("Reception cote client :" + pion_recu.toString());
+                if(obj instanceof Deplacement){
+                    Deplacement depl_recu = (Deplacement)obj;
+                    System.out.println("Deplacement recu par le client : " + this.id_joueur + ".");
+
+                    // Mettre à jour le plateau ici
+                    le_plateau.effectuer_deplacement(depl_recu);
                 }
                 // Ajouter quelque-chose pour recevoir un objet qui désactive l'interface jusqu'à réactivation
                 // Ajouter quelque-chose pour recevoir une notif sur l'état de la partie (gagnée, égalitée etc)
-                
-                // Mettre à jour le plateau ici
+
             }catch(IOException exec){
                 System.out.println("Soucis dans le thread de l'interface client numero : " + id_joueur);
                 exec.printStackTrace();

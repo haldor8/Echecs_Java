@@ -64,11 +64,12 @@ public class Plateau extends JPanel {
                             if (matrice[ligne_buffer][colonne_buffer] != null &&
                                     matrice[ligne_buffer][colonne_buffer].deplacement_valide(
                                             ligne_buffer, colonne_buffer, adjustedI, adjustedJ, matrice)) {
-                                effectuer_deplacement(ligne_buffer, colonne_buffer, adjustedI, adjustedJ);
+                                envoyer_deplacement_au_serveur(ligne_buffer, colonne_buffer, adjustedI, adjustedJ);
                             } else {
                                 System.out.println("Déplacement invalide.");
                             }
                             clear_buffer();
+                            reinitialiserCouleursCases();
                         }
                     }
                 });
@@ -172,42 +173,29 @@ public class Plateau extends JPanel {
         mettre_a_jour_affichage(); // Mettre à jour l'affichage du plateau
     }
 
-    private void effectuer_deplacement(int x1, int y1, int x2, int y2) {
-
-        set_in(entree);
-        set_out(sortie);
-
+    public void effectuer_deplacement(Deplacement dpl) {
+        int[] coordonnees = dpl.get_deplacement();
+        int x1 = coordonnees[0], y1 = coordonnees[1], x2 = coordonnees[2], y2 = coordonnees[3];
         Pieces piece = matrice[x1][y1];
         matrice[x1][y1] = null;
         matrice[x2][y2] = piece;
 
-        // Envoi du mouvement au serveur
-        // Effectuer les déplacements en ajustant les indices pour le joueur 2
-        if (id_joueur == 2) {
-            x1 = nb_lignes - 1 - x1;
-            y1 = nb_colonnes - 1 - y1;
-            x2 = nb_lignes - 1 - x2;
-            y2 = nb_colonnes - 1 - y2;
-        }
-        envoyer_deplacement_au_serveur(x1, y1, x2, y2);
+        // envoyer_deplacement_au_serveur(x1, y1, x2, y2);
         mettre_a_jour_affichage(); // Mettre à jour le plateau après le déplacement
         reinitialiserCouleursCases();
-        recevoirDeplacementDuServeur();
+        // recevoirDeplacementDuServeur();
 
     }
 
     private void envoyer_deplacement_au_serveur(int x1, int y1, int x2, int y2) {
-        if (sortie != null) {
+            // Envoyer le mouvement sous forme de tableau d'entiers
+            Deplacement deplacement = new Deplacement(x1, y1, x2, y2);
             try {
-                // Envoyer le mouvement sous forme de tableau d'entiers
-                int[] deplacement = {x1, y1, x2, y2};
                 sortie.writeObject(deplacement);
-                sortie.flush();
-                System.out.println("Déplacement envoyé au serveur : " + Arrays.toString(deplacement));
+                System.out.println("Déplacement envoyé au serveur : " + deplacement.toString());
             } catch (Exception e) {
                 System.err.println("Erreur lors de l'envoi du déplacement au serveur : " + e.getMessage());
             }
-        }
     }
 
     // Le client 2 reçoit un déplacement du serveur

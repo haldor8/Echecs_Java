@@ -48,21 +48,19 @@ public class Interface_serveur extends Thread {
                 obj = entree.readObject(); // Recevoir l'objet envoyé par le client
                 System.out.println("Inter serveur : " + this.id_joueur + " a reçu un objet");
 
-                if (obj instanceof int[]) {
-                    int[] deplacement = (int[]) obj; // Déplacement sous forme de tableau
-                    System.out.println("Déplacement reçu : " + Arrays.toString(deplacement));
+                if (obj instanceof Deplacement) {
+                    Deplacement deplacement = (Deplacement) obj; // Déplacement sous forme de tableau
+                    System.out.println("Déplacement recu cote serveur : " + deplacement.toString());
 
-                    // Relayer le déplacement à tous les clients sauf celui qui l'a envoyé
+                    // Relayer le déplacement à tous les clients
                     for (Interface_serveur interf : le_serveur.get_liste_des_interfaces()) {
-                        if (interf.id_joueur != this.id_joueur) {
-                            // Envoyer le déplacement à tous les autres clients
-                            try {
-                                ObjectOutputStream sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
-                                sortie.writeObject(deplacement);
-                                sortie.flush();
-                            } catch (IOException e) {
-                                System.out.println("Erreur lors de l'envoi du déplacement au client " + interf.id_joueur);
-                            }
+                        // Envoyer le déplacement à tous les clients
+                        try {
+                            ObjectOutputStream sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
+                            sortie.writeObject(deplacement);
+                            System.out.println("Message envoye au socket : " + interf.id_socket_client);
+                        } catch (IOException e) {
+                            System.out.println("Erreur lors de l'envoi du déplacement au client " + interf.id_joueur);
                         }
                     }
                 }
