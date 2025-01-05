@@ -1,7 +1,8 @@
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -43,8 +44,8 @@ public class Plateau extends JPanel {
                 case_panel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        int adjustedI = id_joueur == 2 ? nb_lignes - 1 - finalI : finalI;
-                        int adjustedJ = id_joueur == 2 ? nb_colonnes - 1 - finalJ : finalJ;
+                        int adjustedI = ajusterCoordonneesPourJoueur(finalI, false);
+                        int adjustedJ = ajusterCoordonneesPourJoueur(finalJ, true);
 
                         System.out.println("Case cliquée : i=" + adjustedI + ", j=" + adjustedJ);
 
@@ -70,22 +71,6 @@ public class Plateau extends JPanel {
                             clear_buffer();
                         }
                     }
-                    //@Override
-                    /*public void mouseReleased(MouseEvent e) {
-                        // Réinitialiser les couleurs des cases après le clic
-                        for (int i = 0; i < nb_lignes; i++) {
-                            for (int j = 0; j < nb_colonnes; j++) {
-                                JPanel case_panel = cases_graphiques[i][j];
-                                if ((i + j) % 2 == 0) {
-                                    case_panel.setBackground(new Color(238, 238, 210)); // clair
-                                } else {
-                                    case_panel.setBackground(new Color(118, 150, 86)); // foncé
-                                }
-                            }
-                        }
-                        clear_buffer();
-                        System.out.println("Relâchement terminé.");
-                    }*/
                 });
 
                 // Ajouter la case au GridLayout
@@ -97,6 +82,14 @@ public class Plateau extends JPanel {
         initialiser_pieces();
         // Mettre à jour l'affichage graphique
         mettre_a_jour_affichage();
+    }
+
+    // Méthode pour ajuster les coordonnées selon le joueur
+    private int ajusterCoordonneesPourJoueur(int coord, boolean estColonne) {
+        if (id_joueur == 2) {
+            return estColonne ? nb_colonnes - 1 - coord : nb_lignes - 1 - coord;
+        }
+        return coord;
     }
 
     private void initialiser_pieces() {
@@ -133,7 +126,6 @@ public class Plateau extends JPanel {
         }
 
         // Réinitialiser les couleurs des cases
-        System.out.println("JEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE REINITIALIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIISEEEEEEE");
         for (int i = 0; i < nb_lignes; i++) {
             for (int j = 0; j < nb_colonnes; j++) {
                 JPanel case_panel = cases_graphiques[i][j];
@@ -148,8 +140,8 @@ public class Plateau extends JPanel {
         ArrayList<int[]> deplacements_possibles = new ArrayList<>();
         for (int i = 0; i < nb_lignes; i++) {
             for (int j = 0; j < nb_colonnes; j++) {
-                int adjustedI = id_joueur == 2 ? nb_lignes - 1 - i : i;
-                int adjustedJ = id_joueur == 2 ? nb_colonnes - 1 - j : j;
+                int adjustedI = ajusterCoordonneesPourJoueur(i, false);
+                int adjustedJ = ajusterCoordonneesPourJoueur(j, true);
 
                 if (la_piece.deplacement_valide(x, y, adjustedI, adjustedJ, matrice)) {
                     if (matrice[adjustedI][adjustedJ] != null &&
@@ -161,35 +153,47 @@ public class Plateau extends JPanel {
             }
         }
 
+        // Afficher les cases où la pièce peut se déplacer
         for (int[] deplacement : deplacements_possibles) {
-            int displayI = id_joueur == 2 ? nb_lignes - 1 - deplacement[0] : deplacement[0];
-            int displayJ = id_joueur == 2 ? nb_colonnes - 1 - deplacement[1] : deplacement[1];
-            JPanel case_panel = cases_graphiques[displayI][displayJ];
-            case_panel.setBackground(new Color(64, 184, 232)); // bleu
+            int displayI = ajusterCoordonneesPourJoueur(deplacement[0], false);
+            int displayJ = ajusterCoordonneesPourJoueur(deplacement[1], true);
+            if(matrice[displayI][displayJ]!=null){
+                JPanel case_panel = cases_graphiques[displayI][displayJ];
+                case_panel.setBackground(new Color(233, 80, 10)); // rouge
+            }
+            else {
+                JPanel case_panel = cases_graphiques[displayI][displayJ];
+                case_panel.setBackground(new Color(64, 184, 232)); // bleu
+            }
         }
 
-        mettre_a_jour_affichage();
+        mettre_a_jour_affichage(); // Mettre à jour l'affichage du plateau
     }
 
     private void effectuer_deplacement(int x1, int y1, int x2, int y2) {
+
+        Pieces piece = matrice[x1][y1];
+        matrice[x1][y1] = null;
+        matrice[x2][y2] = piece;
+
+        // Envoi du mouvement au serveur
+        // Effectuer les déplacements en ajustant les indices pour le joueur 2
         if (id_joueur == 2) {
             x1 = nb_lignes - 1 - x1;
             y1 = nb_colonnes - 1 - y1;
             x2 = nb_lignes - 1 - x2;
             y2 = nb_colonnes - 1 - y2;
         }
-
-        Pieces piece = matrice[x1][y1];
-        matrice[x1][y1] = null;
-        matrice[x2][y2] = piece;
-
         envoyer_deplacement_au_serveur(x1, y1, x2, y2);
-        mettre_a_jour_affichage();
+        mettre_a_jour_affichage(); // Mettre à jour le plateau après le déplacement
+        recevoirDeplacementDuServeur();
+
     }
 
     private void envoyer_deplacement_au_serveur(int x1, int y1, int x2, int y2) {
         if (sortie != null) {
             try {
+                // Envoyer le mouvement sous forme de tableau d'entiers
                 int[] deplacement = {x1, y1, x2, y2};
                 sortie.writeObject(deplacement);
                 sortie.flush();
@@ -200,11 +204,25 @@ public class Plateau extends JPanel {
         }
     }
 
-    public void recevoir_deplacement_du_serveur(int x1, int y1, int x2, int y2) {
-        Pieces piece = matrice[x1][y1];
-        matrice[x1][y1] = null;
-        matrice[x2][y2] = piece;
-        mettre_a_jour_affichage();
+    // Le client 2 reçoit un déplacement du serveur
+    public void recevoirDeplacementDuServeur() {
+        try {
+            // Réception du déplacement envoyé par le serveur
+            int[] deplacement = (int[]) entree.readObject();  // Utilise le ObjectInputStream
+            int x1 = deplacement[0];
+            int y1 = deplacement[1];
+            int x2 = deplacement[2];
+            int y2 = deplacement[3];
+            System.out.println("OUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII recu"+x1);
+
+            // Appliquer ce déplacement sur le plateau du client
+            Pieces piece = matrice[x1][y1];  // Récupère la pièce à déplacer
+            matrice[x1][y1] = null;          // Supprime la pièce de la case d'origine
+            matrice[x2][y2] = piece;         // Place la pièce sur la nouvelle case
+            mettre_a_jour_affichage();        // Met à jour l'affichage du plateau
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -214,8 +232,8 @@ public class Plateau extends JPanel {
                 JPanel case_panel = cases_graphiques[i][j];
                 case_panel.removeAll();
 
-                int adjustedI = id_joueur == 2 ? nb_lignes - 1 - i : i;
-                int adjustedJ = id_joueur == 2 ? nb_colonnes - 1 - j : j;
+                int adjustedI = ajusterCoordonneesPourJoueur(i, false);
+                int adjustedJ = ajusterCoordonneesPourJoueur(j, true);
 
                 Pieces piece = matrice[adjustedI][adjustedJ];
                 if (piece != null && piece.get_icon() != null) {
@@ -233,6 +251,7 @@ public class Plateau extends JPanel {
         this.ligne_buffer = -1;
         this.colonne_buffer = -1;
     }
+
     public void set_out(ObjectOutputStream la_sortie) {
         this.sortie = la_sortie;
     }

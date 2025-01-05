@@ -1,6 +1,8 @@
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import  java.io.*;
+import java.util.Arrays;
 
 // Permet d'envoyer des messages aux clients
 public class Interface_serveur extends Thread {
@@ -32,37 +34,43 @@ public class Interface_serveur extends Thread {
 
     @Override
     public void run(){
-        System.out.println("Interface serveur du client : " + id_joueur + " lancee");
+        System.out.println("Interface serveur " + this.id_joueur + " lancée");
 
-        // On se branche sur la sortie du client
-        try{
-            entree = new ObjectInputStream(this.id_socket_client.getInputStream());
-        }catch(Exception exep){
-            System.out.println("Probleme lors de la recup de l'interface serveur du client : " + this.id_joueur);
+        try {
+            entree = new ObjectInputStream(this.id_socket_client.getInputStream()); // Récupérer le flux d'entrée
+        } catch (IOException exep) {
+            System.out.println("Erreur lors de la récupération de l'interface serveur du client : " + this.id_joueur);
         }
 
-        Object obj = null;
-        Pieces piece_recu = null;
-        do{
-            System.out.println("Interface serveur " + this.id_joueur + " en attente de reception d'un objet");
-            try{
-                obj = entree.readObject();
-                System.out.println("Inter serv : " + this.id_joueur + " a recu un objet");
-                
+        Object obj = null; // Initialiser la variable ici avant d'entrer dans la boucle
+        do {
+            try {
+                obj = entree.readObject(); // Recevoir l'objet envoyé par le client
+                System.out.println("Inter serveur : " + this.id_joueur + " a reçu un objet");
 
-                if (obj instanceof Pieces){
-                    piece_recu = (Pieces)obj;
-                    System.out.println("Pion recu : " + piece_recu.toString());
-                    
-                    // Effectuer le traitement du coup ici
-                    for(Interface_serveur interf : le_serveur.get_liste_des_interfaces()){
-                        sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
-                        sortie.writeObject(piece_recu);
+                if (obj instanceof int[]) {
+                    int[] deplacement = (int[]) obj; // Déplacement sous forme de tableau
+                    System.out.println("Déplacement reçu : " + Arrays.toString(deplacement));
+
+                    // Relayer le déplacement à tous les clients sauf celui qui l'a envoyé
+                    for (Interface_serveur interf : le_serveur.get_liste_des_interfaces()) {
+                        if (interf.id_joueur != this.id_joueur) {
+                            // Envoyer le déplacement à tous les autres clients
+                            try {
+                                ObjectOutputStream sortie = new ObjectOutputStream(interf.id_socket_client.getOutputStream());
+                                sortie.writeObject(deplacement);
+                                sortie.flush();
+                            } catch (IOException e) {
+                                System.out.println("Erreur lors de l'envoi du déplacement au client " + interf.id_joueur);
+                            }
+                        }
                     }
-                }// else if (instanceof Message_interne) ...
-            }catch(Exception exep){
-                System.out.println("Erreur dans le thread de l'interf serveur du joueur : " + this.id_joueur + exep.toString());
+                }
+            } catch (IOException | ClassNotFoundException exep) {
+                System.out.println("Erreur dans le thread de l'interface serveur du joueur : " + this.id_joueur);
+                exep.printStackTrace();
             }
-        }while(obj != null);
+        } while (obj != null); // La condition de la boucle continue tant que obj n'est pas null
     }
+
 }
