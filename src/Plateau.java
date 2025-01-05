@@ -72,6 +72,8 @@ public class Plateau extends JPanel {
                         }
                     }
                 });
+                
+
 
                 // Ajouter la case au GridLayout
                 this.add(case_panel);
@@ -159,7 +161,7 @@ public class Plateau extends JPanel {
             int displayJ = ajusterCoordonneesPourJoueur(deplacement[1], true);
             if(matrice[displayI][displayJ]!=null && matrice[displayI][displayJ].get_proprietaire() != la_piece.get_proprietaire()){
                 JPanel case_panel = cases_graphiques[displayI][displayJ];
-                case_panel.setBackground(new Color(233, 85, 20)); // rouge
+                case_panel.setBackground(new Color(233, 86, 20)); // rouge
             }
             else {
                 JPanel case_panel = cases_graphiques[displayI][displayJ];
