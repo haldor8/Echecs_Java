@@ -9,6 +9,8 @@ public class Cavalier extends Pieces {
         chargerIcon("Pieces/cavalier_" + this.get_Couleur_String()+ ".svg");
     }
 
+
+    @Override
     public boolean deplacement_valide(int x_initial, int y_initial, int x_final, int y_final, Pieces[][] echiquier) {
         int delta_x = Math.abs(x_final - x_initial);
         int delta_y = Math.abs(y_final - y_initial);

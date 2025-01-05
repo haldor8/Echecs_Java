@@ -22,6 +22,10 @@ public class Pieces implements Serializable {
         la_couleur = proprietaire == 1 ? "blanc" : "noir";
     }
 
+    public boolean deplacement_valide(int x_initial, int y_initial, int x_final, int y_final, Pieces[][] echiquier){
+        return true;
+    }
+
     public int get_proprietaire() {
         return proprietaire;
     }

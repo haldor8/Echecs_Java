@@ -9,31 +9,38 @@ public class Fou extends Pieces {
     }
 
 
+    @Override
     public boolean deplacement_valide(int x_initial, int y_initial, int x_final, int y_final, Pieces[][] echiquier) {
         int delta_x = Math.abs(x_final - x_initial);
         int delta_y = Math.abs(y_final - y_initial);
 
-        if (echiquier[x_final][y_final] != null && echiquier[x_final][y_final].get_proprietaire() == (this.get_proprietaire())) {
+        // Le fou se déplace en diagonale, donc delta_x doit être égal à delta_y
+        if (delta_x != delta_y) {
             return false;
         }
 
-        if (delta_x == delta_y) {
-            int step_x = Integer.compare(x_final, x_initial);
-            int step_y = Integer.compare(y_final, y_initial);
+        // Calcul des étapes à prendre pour avancer en diagonale
+        int step_x = Integer.compare(x_final, x_initial);
+        int step_y = Integer.compare(y_final, y_initial);
 
-            int x = x_initial + step_x;
-            int y = y_initial + step_y;
-
-            while (x != x_final || y != y_final) {
-                if (echiquier[x][y] != null) {
-                    return false;
-                }
-                x += step_x;
-                y += step_y;
+        // Vérifier qu'il n'y a pas de pièce sur le chemin
+        int x = x_initial + step_x;
+        int y = y_initial + step_y;
+        while (x != x_final && y != y_final) {
+            // Si la case est occupée, il y a un blocage
+            if (echiquier[x][y] != null) {
+                return false; // Bloqué par une pièce
             }
-            return true;
+            x += step_x;
+            y += step_y;
         }
-        return false;
+
+        return true; // Déplacement valide en diagonale
+    }
+
+
+    public String get_type_piece(){
+        return "Fou";
     }
 }
 
