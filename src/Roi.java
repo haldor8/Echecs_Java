@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Roi extends Pieces {
@@ -20,5 +21,34 @@ public class Roi extends Pieces {
 
         return delta_x <= 1 && delta_y <= 1;
     }
+
+    public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
+        ArrayList<int[]> les_deplacements = new ArrayList<>();
+
+        // Déplacements possibles pour un roi : toutes les cases adjacentes
+        int[][] directions = {
+                {1, 0},   // Bas
+                {-1, 0},  // Haut
+                {0, 1},   // Droite
+                {0, -1},  // Gauche
+                {1, 1},   // Bas-droite
+                {1, -1},  // Bas-gauche
+                {-1, 1},  // Haut-droite
+                {-1, -1}  // Haut-gauche
+        };
+
+        for (int[] direction : directions) {
+            int nx = x + direction[0], ny = y + direction[1];
+
+            if (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) { // Vérifie que la case est valide
+                if (echiquier[nx][ny] == null || echiquier[nx][ny].get_proprietaire() != this.get_proprietaire()) {
+                    les_deplacements.add(new int[]{nx, ny}); // Case vide ou capture possible
+                }
+            }
+        }
+
+        return les_deplacements;
+    }
+
 }
 

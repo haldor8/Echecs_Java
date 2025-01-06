@@ -18,8 +18,8 @@ public class Main {
             Client c2 = new Client(2);
 
             // Ajouter les clients au serveur correspondant
-            le_serveur.ajouter_client(c2);
             le_serveur.ajouter_client(c1);
+            le_serveur.ajouter_client(c2);
         }catch (Exception e) {
             System.out.println("Probleme lors de l'instanciation des clients");
             e.printStackTrace();

@@ -21,5 +21,28 @@ public class Cavalier extends Pieces {
 
         return (delta_x == 2 && delta_y == 1) || (delta_x == 1 && delta_y == 2);
     }
+
+    public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
+        ArrayList<int[]> les_deplacements = new ArrayList<>();
+
+        // Déplacements possibles pour un cavalier
+        int[][] mouvements = {
+                {2, 1}, {2, -1}, {-2, 1}, {-2, -1},
+                {1, 2}, {1, -2}, {-1, 2}, {-1, -2}
+        };
+
+        for (int[] mouvement : mouvements) {
+            int nx = x + mouvement[0], ny = y + mouvement[1];
+
+            if (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) { // Vérifie que la case est valide
+                if (echiquier[nx][ny] == null || echiquier[nx][ny].get_proprietaire() != this.get_proprietaire()) {
+                    les_deplacements.add(new int[]{nx, ny}); // Case vide ou capture possible
+                }
+            }
+        }
+
+        return les_deplacements;
+    }
+
 }
 

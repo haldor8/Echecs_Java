@@ -128,49 +128,42 @@ public class Plateau extends JPanel {
             return;
         }
 
-        // Réinitialiser les couleurs des cases
-        for (int i = 0; i < nb_lignes; i++) {
-            for (int j = 0; j < nb_colonnes; j++) {
-                JPanel case_panel = cases_graphiques[i][j];
-                if ((i + j) % 2 == 0) {
-                    case_panel.setBackground(new Color(238, 238, 210)); // clair
-                } else {
-                    case_panel.setBackground(new Color(118, 150, 86)); // foncé
+        reinitialiserCouleursCases();
+
+        ArrayList<int[]> deplacements_possibles = new ArrayList<int[]>();
+        if(la_piece instanceof Pion){
+            deplacements_possibles = ((Pion)la_piece).deplacements_possibles(x, y, matrice);
+        } else if (la_piece instanceof Roi) {
+            deplacements_possibles = ((Roi)la_piece).deplacements_possibles(x, y, matrice);
+        }else if (la_piece instanceof Reine){
+            deplacements_possibles = ((Reine)la_piece).deplacements_possibles(x, y, matrice);
+        } else if (la_piece instanceof Fou) {
+            deplacements_possibles = ((Fou)la_piece).deplacements_possibles(x, y, matrice);
+        } else if (la_piece instanceof Tour) {
+            deplacements_possibles = ((Tour)la_piece).deplacements_possibles(x, y, matrice);
+        } else if (la_piece instanceof Cavalier) {
+            deplacements_possibles = ((Cavalier)la_piece).deplacements_possibles(x, y, matrice);
+        } else{
+            System.out.println("Piece inconnue.");
+        }
+
+        if(deplacements_possibles != null){ // Si il y a des déplacements possibles
+            // Afficher les cases où la pièce peut se déplacer
+            for (int[] deplacement : deplacements_possibles) {
+                int displayI = ajusterCoordonneesPourJoueur(deplacement[0], false);
+                int displayJ = ajusterCoordonneesPourJoueur(deplacement[1], true);
+                if(matrice[displayI][displayJ] != null && matrice[displayI][displayJ].get_proprietaire() != la_piece.get_proprietaire()){
+                    JPanel case_panel = cases_graphiques[displayI][displayJ];
+                    case_panel.setBackground(new Color(233, 86, 20)); // rouge
+                }
+                else {
+                    JPanel case_panel = cases_graphiques[displayI][displayJ];
+                    case_panel.setBackground(new Color(64, 184, 232)); // bleu
                 }
             }
+
+            mettre_a_jour_affichage(); // Mettre à jour l'affichage du plateau
         }
-
-        ArrayList<int[]> deplacements_possibles = new ArrayList<>();
-        for (int i = 0; i < nb_lignes; i++) {
-            for (int j = 0; j < nb_colonnes; j++) {
-                int adjustedI = ajusterCoordonneesPourJoueur(i, false);
-                int adjustedJ = ajusterCoordonneesPourJoueur(j, true);
-
-                if (la_piece.deplacement_valide(x, y, adjustedI, adjustedJ, matrice)) {
-                    if (matrice[adjustedI][adjustedJ] != null &&
-                            matrice[adjustedI][adjustedJ].get_proprietaire() == la_piece.get_proprietaire()) {
-                        continue;
-                    }
-                    deplacements_possibles.add(new int[]{adjustedI, adjustedJ});
-                }
-            }
-        }
-
-        // Afficher les cases où la pièce peut se déplacer
-        for (int[] deplacement : deplacements_possibles) {
-            int displayI = ajusterCoordonneesPourJoueur(deplacement[0], false);
-            int displayJ = ajusterCoordonneesPourJoueur(deplacement[1], true);
-            if(matrice[displayI][displayJ]!=null && matrice[displayI][displayJ].get_proprietaire() != la_piece.get_proprietaire()){
-                JPanel case_panel = cases_graphiques[displayI][displayJ];
-                case_panel.setBackground(new Color(233, 86, 20)); // rouge
-            }
-            else {
-                JPanel case_panel = cases_graphiques[displayI][displayJ];
-                case_panel.setBackground(new Color(64, 184, 232)); // bleu
-            }
-        }
-
-        mettre_a_jour_affichage(); // Mettre à jour l'affichage du plateau
     }
 
     public void effectuer_deplacement(Deplacement dpl) {
@@ -197,28 +190,6 @@ public class Plateau extends JPanel {
                 System.err.println("Erreur lors de l'envoi du déplacement au serveur : " + e.getMessage());
             }
     }
-
-    // Le client 2 reçoit un déplacement du serveur
-    public void recevoirDeplacementDuServeur() {
-        try {
-            // Réception du déplacement envoyé par le serveur
-            int[] deplacement = (int[]) entree.readObject();  // Utilise le ObjectInputStream
-            int x1 = deplacement[0];
-            int y1 = deplacement[1];
-            int x2 = deplacement[2];
-            int y2 = deplacement[3];
-            System.out.println("OUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII recu"+x1);
-
-            // Appliquer ce déplacement sur le plateau du client
-            Pieces piece = matrice[x1][y1];  // Récupère la pièce à déplacer
-            matrice[x1][y1] = null;          // Supprime la pièce de la case d'origine
-            matrice[x2][y2] = piece;         // Place la pièce sur la nouvelle case
-            mettre_a_jour_affichage();        // Met à jour l'affichage du plateau
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void mettre_a_jour_affichage() {
         for (int i = 0; i < nb_lignes; i++) {

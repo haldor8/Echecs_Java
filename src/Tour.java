@@ -37,5 +37,39 @@ public class Tour extends Pieces {
 
         return false;
     }
+
+    public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
+        ArrayList<int[]> les_deplacements = new ArrayList<>();
+
+        // Directions possibles pour une tour : haut, bas, gauche, droite
+        int[][] directions = {
+                {1, 0},   // Bas
+                {-1, 0},  // Haut
+                {0, 1},   // Droite
+                {0, -1}   // Gauche
+        };
+
+        for (int[] direction : directions) {
+            int dx = direction[0], dy = direction[1];
+            int nx = x + dx, ny = y + dy;
+
+            // Parcours dans une direction jusqu'à rencontrer un obstacle ou sortir du plateau
+            while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+                if (echiquier[nx][ny] == null) {
+                    les_deplacements.add(new int[]{nx, ny}); // Case vide
+                } else {
+                    if (echiquier[nx][ny].get_proprietaire() != this.get_proprietaire()) {
+                        les_deplacements.add(new int[]{nx, ny}); // Capture possible
+                    }
+                    break; // On s'arrête après avoir rencontré une pièce
+                }
+                nx += dx;
+                ny += dy;
+            }
+        }
+
+        return les_deplacements;
+    }
+
 }
 

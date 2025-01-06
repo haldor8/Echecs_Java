@@ -37,6 +37,40 @@ public class Fou extends Pieces {
 
         return true; // Déplacement valide en diagonale
     }
+    public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
+        ArrayList<int[]> les_deplacements = new ArrayList<>();
+
+        // Directions possibles pour un fou : diagonales
+        int[][] directions = {
+                {1, 1},    // Bas-droite
+                {1, -1},   // Bas-gauche
+                {-1, 1},   // Haut-droite
+                {-1, -1}   // Haut-gauche
+        };
+
+        for (int[] direction : directions) {
+            int dx = direction[0], dy = direction[1];
+            int nx = x + dx, ny = y + dy;
+
+            // Parcours dans une direction jusqu'à rencontrer un obstacle ou sortir du plateau
+            while (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
+                if (echiquier[nx][ny] == null) {
+                    les_deplacements.add(new int[]{nx, ny}); // Case vide
+                } else {
+                    if (echiquier[nx][ny].get_proprietaire() != this.get_proprietaire()) {
+                        les_deplacements.add(new int[]{nx, ny}); // Capture possible
+                    }
+                    break; // On s'arrête après avoir rencontré une pièce
+                }
+                nx += dx;
+                ny += dy;
+            }
+        }
+
+        return les_deplacements;
+    }
+
+
 
 
     public String get_type_piece(){
