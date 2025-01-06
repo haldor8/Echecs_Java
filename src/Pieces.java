@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.Serializable;
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import org.apache.batik.transcoder.*;
 import org.apache.batik.transcoder.image.*;
@@ -52,6 +53,31 @@ public class Pieces implements Serializable {
         }
     }
 
+    public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] matrice){
+        ArrayList<int[]> deplacements_possibles = new ArrayList<int[]>();
+        return deplacements_possibles;
+    }
+
+    public boolean est_attaque(int x, int y, Pieces[][] echiquier) {
+        ArrayList<int[]> coordonnees_ennemies = get_pieces_ennemies(echiquier);
+
+        for (int[] coordonnee : coordonnees_ennemies) {
+            int piece_x = coordonnee[0], piece_y = coordonnee[1];
+
+
+            // Vérifier si la pièce peut attaquer
+            ArrayList<int[]> mouvements = echiquier[piece_x][piece_y].deplacements_possibles(piece_x, piece_y, echiquier);
+            for(int[] mouvements_ennemis : mouvements){
+                Pieces la_case = echiquier[mouvements_ennemis[0]][mouvements_ennemis[1]];
+                if(la_case != null && la_case == this){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     private static class BufferedImageTranscoder extends ImageTranscoder {
         private BufferedImage image;
 
@@ -73,5 +99,18 @@ public class Pieces implements Serializable {
         public BufferedImage getBufferedImage() {
             return image;
         }
+    }
+
+    public ArrayList<int[]> get_pieces_ennemies(Pieces[][] matrice){
+        ArrayList<int[]> les_pieces = new ArrayList<int[]>();
+        for(int colonne = 0; colonne < 8; colonne++){
+            for(int ligne = 0; ligne < 8; ligne++){
+                Pieces la_case = matrice[ligne][colonne];
+                if(la_case != null && this.get_proprietaire() != la_case.get_proprietaire()){
+                    les_pieces.add(new int[]{ligne, colonne});
+                }
+            }
+        }
+        return les_pieces;
     }
 }

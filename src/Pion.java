@@ -38,6 +38,7 @@ public class Pion extends Pieces {
         return false;
     }
 
+    @Override
     public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
         ArrayList<int[]> les_deplacements = new ArrayList<>();
         int direction = (this.get_proprietaire() == 1) ? -1 : 1; // -1 pour blanc, 1 pour noir

@@ -13,7 +13,7 @@ public class Main {
         }
 
         try {
-            //jdbkalobdalbdlabdaldadbladabca
+            // Instancier les clients
             Client c1 = new Client(1);
             Client c2 = new Client(2);
 

@@ -30,6 +30,8 @@ public class Interface_client extends Thread {
     private Plateau le_plateau;
     private int id_joueur;
 
+    private int joueur_qui_joue = 1;
+
     public Interface_client(Socket soc, int num, Plateau plto){
         super();
         id_socket_client = soc;
@@ -55,12 +57,20 @@ public class Interface_client extends Thread {
 
                 if(obj instanceof Deplacement){
                     Deplacement depl_recu = (Deplacement)obj;
+                    int[] coords_depl = depl_recu.get_deplacement();
+                    Pieces la_case = le_plateau.getMatrice()[coords_depl[0]][coords_depl[1]];
+
                     System.out.println("Deplacement recu par le client : " + this.id_joueur + ".");
 
-                    // Mettre à jour le plateau ici
-                    le_plateau.effectuer_deplacement(depl_recu);
+                    if(la_case != null && la_case.get_proprietaire() == joueur_qui_joue){
+                        // Mettre à jour le plateau ici
+                        le_plateau.effectuer_deplacement(depl_recu);
+
+                        System.out.println(joueur_qui_joue);
+                        joueur_qui_joue = joueur_qui_joue%2 + 1;
+                    }
+
                 }
-                // Ajouter quelque-chose pour recevoir un objet qui désactive l'interface jusqu'à réactivation
                 // Ajouter quelque-chose pour recevoir une notif sur l'état de la partie (gagnée, égalitée etc)
 
             }catch(IOException exec){

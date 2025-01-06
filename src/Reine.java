@@ -41,6 +41,7 @@ public class Reine extends Pieces {
         return false;
     }
 
+    @Override
     public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
         ArrayList<int[]> les_deplacements = new ArrayList<>();
 

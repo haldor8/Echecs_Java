@@ -37,6 +37,7 @@ public class Fou extends Pieces {
 
         return true; // Déplacement valide en diagonale
     }
+    @Override
     public ArrayList<int[]> deplacements_possibles(int x, int y, Pieces[][] echiquier) {
         ArrayList<int[]> les_deplacements = new ArrayList<>();
 

@@ -1,3 +1,5 @@
+import org.apache.batik.apps.svgbrowser.NodePickerPanel;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -61,13 +63,12 @@ public class Plateau extends JPanel {
                             }
                         } else {
                             // Deuxième sélection (déplacement)
-                            if (matrice[ligne_buffer][colonne_buffer] != null &&
-                                    matrice[ligne_buffer][colonne_buffer].deplacement_valide(
-                                            ligne_buffer, colonne_buffer, adjustedI, adjustedJ, matrice)) {
+                            if(tester_deplacement(adjustedI, adjustedJ)){
                                 envoyer_deplacement_au_serveur(ligne_buffer, colonne_buffer, adjustedI, adjustedJ);
-                            } else {
-                                System.out.println("Déplacement invalide.");
+                            }else{
+                                System.out.println("Deplacement non envoye au serveur");
                             }
+
                             clear_buffer();
                             reinitialiserCouleursCases();
                         }
@@ -130,22 +131,7 @@ public class Plateau extends JPanel {
 
         reinitialiserCouleursCases();
 
-        ArrayList<int[]> deplacements_possibles = new ArrayList<int[]>();
-        if(la_piece instanceof Pion){
-            deplacements_possibles = ((Pion)la_piece).deplacements_possibles(x, y, matrice);
-        } else if (la_piece instanceof Roi) {
-            deplacements_possibles = ((Roi)la_piece).deplacements_possibles(x, y, matrice);
-        }else if (la_piece instanceof Reine){
-            deplacements_possibles = ((Reine)la_piece).deplacements_possibles(x, y, matrice);
-        } else if (la_piece instanceof Fou) {
-            deplacements_possibles = ((Fou)la_piece).deplacements_possibles(x, y, matrice);
-        } else if (la_piece instanceof Tour) {
-            deplacements_possibles = ((Tour)la_piece).deplacements_possibles(x, y, matrice);
-        } else if (la_piece instanceof Cavalier) {
-            deplacements_possibles = ((Cavalier)la_piece).deplacements_possibles(x, y, matrice);
-        } else{
-            System.out.println("Piece inconnue.");
-        }
+        ArrayList<int[]> deplacements_possibles = la_piece.deplacements_possibles(x, y, matrice);
 
         if(deplacements_possibles != null){ // Si il y a des déplacements possibles
             // Afficher les cases où la pièce peut se déplacer
@@ -181,14 +167,14 @@ public class Plateau extends JPanel {
     }
 
     private void envoyer_deplacement_au_serveur(int x1, int y1, int x2, int y2) {
-            // Envoyer le mouvement sous forme de tableau d'entiers
-            Deplacement deplacement = new Deplacement(x1, y1, x2, y2);
-            try {
-                sortie.writeObject(deplacement);
-                System.out.println("Déplacement envoyé au serveur : " + deplacement.toString());
-            } catch (Exception e) {
-                System.err.println("Erreur lors de l'envoi du déplacement au serveur : " + e.getMessage());
-            }
+        // Envoyer le mouvement sous forme de tableau d'entiers
+        Deplacement deplacement = new Deplacement(x1, y1, x2, y2);
+        try {
+            sortie.writeObject(deplacement);
+            System.out.println("Déplacement envoyé au serveur : " + deplacement.toString());
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'envoi du déplacement au serveur : " + e.getMessage());
+        }
     }
 
     private void mettre_a_jour_affichage() {
@@ -246,5 +232,76 @@ public class Plateau extends JPanel {
                 }
             }
         }
+    }
+
+    private boolean tester_deplacement(int x_dest, int y_dest){
+        Pieces piece_actuelle = matrice[ligne_buffer][colonne_buffer];
+        Roi roi_du_joueur = trouver_roi();
+
+        // Si le roi est en échec
+        if(roi_du_joueur.est_attaque(ligne_buffer, colonne_buffer, matrice)){
+            // Si le déplacement sort le roi de l'échec (le roi n'est plus en échec)
+            System.out.println("Le roi est en echec");
+            if(!roi_du_joueur.est_attaque(ligne_buffer, colonne_buffer, pre_deplacer(x_dest, y_dest))){
+                if (piece_actuelle != null){
+                    if(piece_actuelle.deplacement_valide(ligne_buffer, colonne_buffer, x_dest, y_dest, matrice)) {
+                        return true;
+                    }
+                } else {
+                    System.out.println("Déplacement invalide.");
+                }
+            }else{
+                System.out.println("Le roi est toujours en echec");
+            }
+            // Si le déplacement ne met pas le roi en échec
+        } else {
+            if (!roi_du_joueur.est_attaque(ligne_buffer, colonne_buffer, pre_deplacer(x_dest, y_dest))) {
+                if (piece_actuelle != null) {
+                    if (piece_actuelle.deplacement_valide(ligne_buffer, colonne_buffer, x_dest, y_dest, matrice)) {
+                        return true;
+                    }
+                }
+            }else{
+                System.out.println("Le deplacement met le roi en echec.");
+            }
+        }
+
+        return false;
+    }
+
+    private Roi trouver_roi(){
+        for(int colonne = 0; colonne < 8; colonne++){
+            for(int ligne = 0; ligne < 8; ligne++){
+                if(matrice[ligne][colonne] != null) {
+                    if (matrice[ligne][colonne] instanceof Roi && matrice[ligne][colonne].get_proprietaire() == this.id_joueur) {
+                        return (Roi)matrice[ligne][colonne];
+                    }
+                }
+            }
+        }
+        return null; // Si on trouve rien, alors on retourne rien
+    }
+
+    private Pieces[][] pre_deplacer(int x_depl, int y_depl){
+        // Deepcopy du plateau
+        Pieces[][] matrice_temp = deepcopy_plateau();
+        Pieces piece = matrice_temp[ligne_buffer][colonne_buffer];
+        matrice_temp[ligne_buffer][colonne_buffer] = null;
+        matrice_temp[x_depl][y_depl] = piece;
+        return matrice_temp;
+    }
+
+    private Pieces[][] deepcopy_plateau(){
+        Pieces[][] nouv_matrice = new Pieces[8][8];
+        for(int colonne = 0; colonne < 8; colonne++){
+            for(int ligne = 0; ligne < 8; ligne++){
+                nouv_matrice[ligne][colonne] = matrice[ligne][colonne];
+            }
+        }
+        return nouv_matrice;
+    }
+
+    public Pieces[][] getMatrice(){
+        return this.matrice;
     }
 }

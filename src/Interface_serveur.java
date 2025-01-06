@@ -16,6 +16,7 @@ public class Interface_serveur extends Thread {
     private Serveur le_serveur;
     private int id_joueur;
 
+
     public Interface_serveur(Socket soc, int num, Serveur s){
         this.id_socket_client = soc;
         this.id_joueur = num;
@@ -48,9 +49,9 @@ public class Interface_serveur extends Thread {
                 obj = entree.readObject(); // Recevoir l'objet envoyé par le client
                 System.out.println("Inter serveur : " + this.id_joueur + " a reçu un objet");
 
-                if (obj instanceof Deplacement) {
-                    Deplacement deplacement = (Deplacement) obj; // Déplacement sous forme de tableau
-                    System.out.println("Déplacement recu cote serveur : " + deplacement.toString());
+                    if (obj instanceof Deplacement) {
+                        Deplacement deplacement = (Deplacement) obj; // Déplacement sous forme de tableau
+                        System.out.println("Déplacement recu cote serveur : " + deplacement.toString());
 
                     // Relayer le déplacement à tous les clients
                     for (Interface_serveur interf : le_serveur.get_liste_des_interfaces()) {
@@ -64,6 +65,7 @@ public class Interface_serveur extends Thread {
                         }
                     }
                 }
+
             } catch (IOException | ClassNotFoundException exep) {
                 System.out.println("Erreur dans le thread de l'interface serveur du joueur : " + this.id_joueur);
                 exep.printStackTrace();
